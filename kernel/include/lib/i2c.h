@@ -59,9 +59,9 @@ void i2c_init();
 /*
     writes <buflen> bytes from <buf> to the i2c device at <address>
 */
-void i2c_write(uint8_t address, uint8_t *buf, size_t buflen);
+void i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen);
 
 /*
     reads <buflen> bytes into <buf> from the i2c device at <address>
 */
-void i2c_read(uint8_t address, uint8_t *buf, size_t buflen);
+void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen);
