@@ -1,1 +1,7 @@
 genromfs*
+.vscode
+*.o
+*.a
+*.img
+*.elf
+*.dis

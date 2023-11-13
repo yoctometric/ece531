@@ -7,9 +7,9 @@ all:	lib-armv7.a
 
 ### ARMV7
 
-lib-armv7.a:	memcpy.armv7.o memory_benchmark.armv7.o memset.armv7.o printk.armv7.o string.armv7.o
+lib-armv7.a:	memcpy.armv7.o memory_benchmark.armv7.o memset.armv7.o printk.armv7.o string.armv7.o i2c.arm7.o
 	$(CROSS)$(AR) crs lib-armv7.a memcpy.armv7.o memory_benchmark.armv7.o memset.armv7.o \
-		printk.armv7.o string.armv7.o
+		printk.armv7.o string.armv7.o i2c.arm7.o
 
 memcpy.armv7.o:	memcpy.c
 	$(CROSS)$(CC) $(CFLAGS_ARMV7) $(INCLUDE) -o memcpy.armv7.o -c memcpy.c
@@ -25,6 +25,9 @@ printk.armv7.o:	printk.c
 
 string.armv7.o:	string.c
 	$(CROSS)$(CC) $(CFLAGS_ARMV7) $(INCLUDE) -o string.armv7.o -c string.c
+
+i2c.arm7.o: i2c.c
+	$(CROSS)$(CC) $(CFLAGS_ARMV7) $(INCLUDE) -o i2c.arm7.o -c i2c.c
 
 ###
 
