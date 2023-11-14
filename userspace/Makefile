@@ -5,21 +5,25 @@ include ../Makefile.inc
 include Makefile_user.inc
 
 all:	shell \
-	cat cat_count hello ll ls printa printb pwd slideshow sysinfo uname
+	ext_temp cat cat_count hello ll ls printa printb pwd slideshow sysinfo uname 
 
 image:	shell \
-	cat cat_count hello ll ls printa printb pwd slideshow sysinfo uname
+	ext_temp cat cat_count hello ll ls printa printb pwd slideshow sysinfo uname 
 	mkdir -p image
 	mkdir -p image/bin
 	mkdir -p image/home
 	mkdir -p image/home/ansis
-	cp shell cat cat_count hello ll ls printa printb pwd slideshow \
+	cp shell ext_temp cat cat_count hello ll ls printa printb pwd slideshow \
 		sysinfo uname ./image/bin
 	cp CATME ./image/home
 	$(GENROMFS) -f initrd.romfs -d image -V VMWos
 	echo "unsigned char initrd_image[]={" > initrd.h
 	xxd -i < initrd.romfs >> initrd.h
 	echo "};" >> initrd.h
+
+
+ext_temp:	ext_temp.elf
+	$(CROSS)objcopy $(OBJCOPYFLAGS) ext_temp.elf -O binary ext_temp
 
 shell:	shell.elf
 	$(CROSS)objcopy $(OBJCOPYFLAGS) shell.elf -O binary shell
@@ -58,6 +62,8 @@ uname:	uname.elf
 	$(CROSS)objcopy $(OBJCOPYFLAGS) uname.elf -O binary uname
 
 
+ext_temp.elf:	ext_temp.o ./vlibc/vlibc.a
+	$(CROSS)$(CC) $(CFLAGS) $(LFLAGS) -o ext_temp.elf ext_temp.o ./vlibc/vlibc.a
 
 shell.elf:	shell.o ./vlibc/vlibc.a
 	$(CROSS)$(CC) $(CFLAGS) $(LFLAGS) -o shell.elf shell.o ./vlibc/vlibc.a
@@ -96,6 +102,9 @@ uname.elf:	uname.o ./vlibc/vlibc.a
 	$(CROSS)$(CC) $(CFLAGS) $(LFLAGS) -o uname.elf uname.o ./vlibc/vlibc.a
 
 ####
+
+ext_temp.o:	ext_temp.c
+	$(CROSS)$(CC) $(CFLAGS) -c ext_temp.c
 
 cat.o:	cat.c
 	$(CROSS)$(CC) $(CFLAGS) -c cat.c
@@ -138,7 +147,7 @@ ll.o:	ll.arm.eabi.s logo.lzss_new
 
 clean:
 	rm -f *~ *.o *.elf \
-		hello cat cat_count ll ls printa printb \
+		hello cat cat_count ll ls printa printb ex_temp \
 		pwd shell slideshow sysinfo uname \
 		initrd.h initrd.romfs
 	rm -rf image
