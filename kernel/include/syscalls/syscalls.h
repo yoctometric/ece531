@@ -37,3 +37,7 @@
 #define SYSCALL_RANDOM		8199
 #define SYSCALL_FRAMEBUFFER_LOAD	8200
 #define SYSCALL_MALLOC		8201	/* hack */
+
+/* WEC syscalls */
+#define SYSCALL_I2C_WRITE   9101
+#define SYSCALL_I2C_READ    9102

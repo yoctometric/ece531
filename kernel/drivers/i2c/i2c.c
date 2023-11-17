@@ -1,5 +1,5 @@
 
-#include "lib/i2c.h"
+#include "drivers/i2c/i2c.h"
 #include "drivers/bcm2835/bcm2835_io.h"
 #include "lib/delay.h"
 

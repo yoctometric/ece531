@@ -4,7 +4,7 @@ Code by Willow Cunningham
 */
 
 #include <stdint.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 #include "drivers/bcm2835/bcm2835_periph.h"
 

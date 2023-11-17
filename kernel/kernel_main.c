@@ -19,6 +19,8 @@
 
 #include "interrupts/interrupts.h"
 
+#include "include/drivers/i2c/i2c.h"
+
 #include "debug/panic.h"
 
 /* Initrd hack */
@@ -86,6 +88,9 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t r2,
 	/************************/
 	/* Other init		*/
 	/************************/
+
+	/* Init the i2c library */
+	i2c_init();
 
 	/* Init the file descriptor table */
 	fd_table_init();
