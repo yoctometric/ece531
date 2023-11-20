@@ -14,8 +14,8 @@ Code by Willow Cunningham
 #define I2C_SDA_PIN     2
 #define I2C_SCL_PIN     3
 
-#define I2C_SDA_FSEL    (4 << (I2C_SDA_PIN * 3)) // value to pass into the gpio fsel register to set i2c (alt func 0)
-#define I2C_SCL_FSEL    (4 << (I2C_SDA_PIN * 3))
+#define I2C_SDA_FSEL    (0x4 << (3 * I2C_SDA_PIN)) // value to pass into the gpio fsel register to set i2c (alt func 0)
+#define I2C_SCL_FSEL    (0x4 << (3 * I2C_SCL_PIN))
 
 #define I2C_BASE        (IO_BASE + 0x00804000)
 

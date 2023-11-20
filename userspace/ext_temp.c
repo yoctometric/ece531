@@ -20,6 +20,8 @@
 int main(int argc, char **argv) {
     printf("Temperature time....\n");
 
+    while(1) {
+
     // temperature default config may be sufficient
 
     // request a read from the temperature sensor (TA register)
@@ -30,10 +32,35 @@ int main(int argc, char **argv) {
             tavtc   tavtu   tavtl   sign    data (in twos compliment format)
     */
 
-    uint8_t response[2] = {0, 0};
+    uint8_t response[2] = {-1, -1};
     vmwos_i2c_read_blocking(DEVICE_ADDRESS, response, 2);
 
-    printf("    response: %x, %x\n", response[1], response[0]);
+    printf("    response: %x, %x\n", response[0], response[1]);
+
+    // convert the response data into a temperature value.
+    // see page 25 of https://cdn-shop.adafruit.com/datasheets/MCP9808.pdf
+
+    // upper byte is response[0], lower byte is response[1]
+    uint8_t ub = response[0] & 0x1f;    // clear out the flag bits
+    uint8_t lb = response[1];
+    int temperature;
+
+    // calc temp based on the sign bit
+    if ((ub & 0x10) == 0x10) {    // TA < 0 degrees c
+        ub = ub & 0x0f;
+        temperature = 256 - (ub * 16 + lb / 16);
+    }
+    else {
+        temperature = ub * 16 + lb / 16;
+    }
+
+    printf("Read temperature from external sensor: %d degrees C\n", temperature);
+
+    
+
+    }
+
+
 
     return 0;
 }
