@@ -131,7 +131,7 @@ void *vmwos_malloc(uint32_t size) {
 }
 
 
-void vmwos_i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
+int vmwos_i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 {
 	register long r7 __asm__("r7") = __NR_i2c_write;
 	register long r0 __asm__("r0")=(unsigned long)address;
@@ -143,9 +143,11 @@ void vmwos_i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 		:  "=r"(r0)
 		: "r"(r7), "0"(r0), "r"(r1), "r"(r2) /* input */
 		: "memory");
+
+	return r0;
 }
 
-void vmwos_i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
+int vmwos_i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 {
 	register long r7 __asm__("r7") = __NR_i2c_read;
 	register long r0 __asm__("r0")=(unsigned long)address;
@@ -157,4 +159,6 @@ void vmwos_i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 		:  "=r"(r0)
 		: "r"(r7), "0"(r0), "r"(r1), "r"(r2) /* input */
 		: "memory");
+
+	return r0;
 }

@@ -50,6 +50,9 @@ Code by Willow Cunningham
 #define REGM_S_DONE      (1 << 1)
 #define REGM_S_TA        (1 << 0)
 
+// error codes
+#define I2C_ERROR_CLOCKSTRETCH      -1
+#define I2C_ERROR_ACK               -2
 
 /*
     Sets up the gpio pins to be used for I2C
@@ -59,9 +62,9 @@ void i2c_init();
 /*
     writes <buflen> bytes from <buf> to the i2c device at <address>
 */
-void i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen);
+int i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen);
 
 /*
     reads <buflen> bytes into <buf> from the i2c device at <address>
 */
-void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen);
+int i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen);

@@ -226,11 +226,11 @@ uint32_t swi_handler_c(
 		/*********************/	
 
 		case SYSCALL_I2C_READ:
-			i2c_read_blocking((uint8_t)r0, (uint8_t *)r1, r2);
+			result=(uint32_t)i2c_read_blocking((uint8_t)r0, (uint8_t *)r1, r2);
 			break;
 
 		case SYSCALL_I2C_WRITE:
-			i2c_write_blocking((uint8_t)r0, (uint8_t *)r1, r2);
+			result=(uint32_t)i2c_write_blocking((uint8_t)r0, (uint8_t *)r1, r2);
 			break;
 
 		default:

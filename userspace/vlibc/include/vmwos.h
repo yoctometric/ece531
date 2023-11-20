@@ -22,6 +22,6 @@ void *vmwos_malloc(uint32_t size);
 /* willowec syscalls */
 #define __NR_i2c_write  9101
 #define __NR_i2c_read   9102
-void vmwos_i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen);
-void vmwos_i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen);
+int vmwos_i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen);
+int vmwos_i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen);
 // no need to make a syscall for the i2c init because that is called by kernel_main

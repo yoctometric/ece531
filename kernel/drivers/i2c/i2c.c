@@ -26,7 +26,7 @@ void i2c_init()
 }
 
 
-void i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
+int i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 {
     // set the address of the device
     bcm2835_write(REG_I2C_A, address);
@@ -50,15 +50,24 @@ void i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
         while(bcm2835_read(REG_I2C_S & REGM_S_TXD) == 0)
             asm("");
 
-        // now that the fifo has space, pop on the next byte
+        // now that the fifo has space, push on the next byte
         bcm2835_write(REG_I2C_FIFO, buf[i]);
     }
-    // printk("    finished writing i2c\n");
+
+    // wait for the write operation to finish before exiting the function
+    while ((bcm2835_read(REG_I2C_S) & REGM_S_DONE) == 0) {
+        asm("");
+    }
+
+    return 0;
 }
 
 
-void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
+int i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 {
+
+    buflen = buflen;
+
     // set the address of the device
     bcm2835_write(REG_I2C_A, address);
 
@@ -102,9 +111,20 @@ void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 
         // pop off of the fifo
         buf[i] = bcm2835_read(REG_I2C_FIFO) & 0xff;
+        printk("        read %x\n", buf[i]);
         delay(150);
         //printk("        %x\n", buf[i]);
         //printk(     "Did i2c experience an ACK error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_ERR);
         //printk(     "Did i2c experience an CLKT error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_CLKT);
     }
+
+    // return error codes
+    if ((bcm2835_read(REG_I2C_S) & REGM_S_ERR) != 0) {
+        return I2C_ERROR_ACK;
+    }
+    else if ((bcm2835_read(REG_I2C_S) & REGM_S_CLKT) != 0) {
+        return I2C_ERROR_CLOCKSTRETCH;
+    }
+
+    return 0;
 }
