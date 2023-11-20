@@ -226,12 +226,10 @@ uint32_t swi_handler_c(
 		/*********************/	
 
 		case SYSCALL_I2C_READ:
-			printk("suscall i2c read!\n");
 			i2c_read_blocking((uint8_t)r0, (uint8_t *)r1, r2);
 			break;
 
 		case SYSCALL_I2C_WRITE:
-			printk("suscall i2c write!\n");
 			i2c_write_blocking((uint8_t)r0, (uint8_t *)r1, r2);
 			break;
 

@@ -22,7 +22,7 @@ void i2c_init()
 	delay(150);
 	bcm2835_write(REG_I2C_DIV, CORE_CLOCK_SPEED / I2C_SPEED);
 
-    printk("|- --Initialized I2C-- -|\n");
+    // printk("|- --Initialized I2C-- -|\n");
 }
 
 
@@ -53,7 +53,7 @@ void i2c_write_blocking(uint8_t address, uint8_t *buf, size_t buflen)
         // now that the fifo has space, pop on the next byte
         bcm2835_write(REG_I2C_FIFO, buf[i]);
     }
-    printk("    finished writing i2c\n");
+    // printk("    finished writing i2c\n");
 }
 
 
@@ -70,12 +70,14 @@ void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
 
     // set the data length 
     bcm2835_write(REG_I2C_DLEN, buflen);
+    delay(150);
+
 
     // tell the control register to start a read
     bcm2835_write(REG_I2C_C, REGM_C_I2CEN | REGM_C_ST | REGM_C_READ);
     delay(150);
 
-    printk("    Waiting for i2c to be done to read:\n");
+    //printk("    Waiting for i2c to be done to read:\n");
 
 
     // wait for the i2c to be done
@@ -87,11 +89,12 @@ void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
     // TODO: Experiencing both an ACK and CLKT error only after this while loop finishes
 
 
-    printk(     "Did i2c experience an ACK error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_ERR);
-    printk(     "Did i2c experience an CLKT error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_CLKT);
+    //printk(     "Did i2c experience an ACK error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_ERR);
+    //printk(     "Did i2c experience an CLKT error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_CLKT);
 
     // grab the incoming data off of the FIFO
-    printk("    i2c read incoming. Waited %d cycles:\n", i);
+    //printk("    i2c read incoming. Waited %d cycles:\n", i);
+    delay(150);
     for (i = 0; i < buflen; i++) {
         // wait for there to be something on the FIFO
         while(bcm2835_read(REG_I2C_S & REGM_S_RXD) == 0)
@@ -100,8 +103,8 @@ void i2c_read_blocking(uint8_t address, uint8_t *buf, size_t buflen)
         // pop off of the fifo
         buf[i] = bcm2835_read(REG_I2C_FIFO) & 0xff;
         delay(150);
-        printk("        %x\n", buf[i]);
-        printk(     "Did i2c experience an ACK error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_ERR);
-        printk(     "Did i2c experience an CLKT error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_CLKT);
+        //printk("        %x\n", buf[i]);
+        //printk(     "Did i2c experience an ACK error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_ERR);
+        //printk(     "Did i2c experience an CLKT error? %d\n", bcm2835_read(REG_I2C_S) & REGM_S_CLKT);
     }
 }

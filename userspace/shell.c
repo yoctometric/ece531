@@ -224,9 +224,9 @@ static int parse_input(char *string) {
 					if (background) {
 					}
 					else {
-						printf("Waiting for %d to finish\n",pid);
+						//printf("Waiting for %d to finish\n",pid);
 						waitpid(pid,&status,0);
-						printf("Child exited with %d\n",status);
+						//printf("Child exited with %d\n",status);
 					}
 				}
 			}
