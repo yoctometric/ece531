@@ -1,6 +1,6 @@
 # ECE 531 (Advanced Operating Systems) Final Project
 
-Code by Willow Cunningham, built on top of an operating system by Dr. Vincent Weaver.
+An i2c driver for the Raspberry Pi 3b+ written by Willow Cunningham, built on top of an operating system by Dr. Vincent Weaver.
 
 ## Building / Running
 
